@@ -3,8 +3,8 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 1.0
-* Live Testing Successful
+#### 1.1
+* Extension Filter Text File
 
 
 ##Purpose
@@ -22,6 +22,7 @@ in a format compatible with multiple media players and platforms.
 ##Instructions
 0. Organize your media into one folder per show (not per season) alphabetically
 1. Place rpifo.py in the parent directory that contains your media folders
+    * Optional: Place ext.txt in same directory, edit as needed
 2. Run the rpifo.py script
 3. Open the resulting rpifo.m3u in your media player.
 
@@ -42,9 +43,11 @@ in a format compatible with multiple media players and platforms.
 
 ##Logical Assumptions
 * Non-media files will be ignored/skipped quickly
+* Large amounts of files can be quickly and eaisly renamed using Bulk Renamer
+    * http://www.bulkrenameutility.co.uk/
 
 
 ##To-Do
 * Exclusion Regex File
 * Paths File
-* Extentions Filter
+* Time based ouput messages
