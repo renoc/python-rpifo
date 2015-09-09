@@ -1,2 +1,3 @@
 *.pyc
+debug*
 rpifo.m3u

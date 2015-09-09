@@ -1,16 +1,19 @@
 .sample
 
+mp3
+wav
+
 avi
 divx
+mp4
 mpg
 mpeg
 mkv
 ogg
 mov
 qt
-
-mp3
-wav
+flv
+webm
 
 gif
 jif

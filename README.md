@@ -3,8 +3,9 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 1.1
+#### 1.11
 * Extension Filter Text File
+* Output feedback messages
 
 
 ##Purpose
@@ -28,9 +29,10 @@ in a format compatible with multiple media players and platforms.
 
 
 ##Requirments
-* Forwards compatibility: ????
-* Python 2.79 https://www.python.org/downloads/release/python-279/
-* Backwards compatibility: ????
+* Python 2.79
+    * https://www.python.org/downloads/release/python-279/
+    * Forwards compatibility: ????
+    * Backwards compatibility: ????
 
 
 ##Software Compatibility
@@ -50,4 +52,3 @@ in a format compatible with multiple media players and platforms.
 ##To-Do
 * Exclusion Regex File
 * Paths File
-* Time based ouput messages
