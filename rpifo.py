@@ -48,7 +48,7 @@ def read_directories():
             return True
         return False
 
-    for dirpath, dnames, fnames in os.walk("."):
+    for dirpath, dnames, fnames in os.walk(u'.'):
         for filename in fnames:
             if len(dirpath) > 1 and check_filetype(filename):
                 dirlist.append(dirpath)
@@ -72,7 +72,7 @@ def output_m3u():
             report_progress()
             dirpath = dirlist.pop(randint(1, len(dirlist)) - 1)
             filename = filedict[dirpath].pop(0)
-            open_file.write('%s/%s\n' % (dirpath, filename))
+            open_file.write(('%s/%s\n' % (dirpath, filename)).encode('utf8'))
     feedback('...Done')
 
 

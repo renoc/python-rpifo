@@ -3,7 +3,7 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 1.11
+#### 1.12
 * Extension Filter Text File
 * Output feedback messages
 
@@ -12,7 +12,7 @@ Random Playlist In Folder Order
 Simple script to create a randomized playlist where certain sets of files are
 played in order, but not immediately concurrent. You can play all your podcasts
 as serials and create your own radio station, or television station if they're
-video podcasts.
+video podcasts. The show to be played is random but the episodes are in order.
 
 Subsets are controlled by folder structure, order is alphabetical by filename.
 The LazyTv plugin for Kodi(XBMC) has a similar function, but RPIFO will work
@@ -40,11 +40,12 @@ in a format compatible with multiple media players and platforms.
 * Windows: Pass
 * VLC: Pass
 * Winamp: Pass
-* Fail: MPC
+* Fail: Media Player Classic
 
 
 ##Logical Assumptions
-* Non-media files will be ignored/skipped quickly
+* No files in the working directory should be added to playlist
+* Non-media files will be ignored/skipped quickly by the player
 * Large amounts of files can be quickly and eaisly renamed using Bulk Renamer
     * http://www.bulkrenameutility.co.uk/
 
