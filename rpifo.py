@@ -4,6 +4,7 @@ import os
 import re
 
 
+MIN_FOLDER_SIZE = 32
 dirlist = []
 extensions = []
 filedict = {}
@@ -36,21 +37,21 @@ def set_extensions():
             len(ext) and extensions.append(ext)
 
 
+def check_filetype(filename):
+    # exclude self and previous playlist result
+    if not len(extensions):
+        return True
+    ext = filename.split('.')[-1]
+    if ext in extensions:
+        return True
+    return False
+
+
 def read_directories():
     feedback('Reading Directories...')
-
-    def check_filetype(filename):
-        # exclude self and previous playlist result
-        if not len(extensions):
-            return True
-        ext = filename.split('.')[-1]
-        if ext in extensions:
-            return True
-        return False
-
     for dirpath, dnames, fnames in os.walk(u'.'):
         for filename in fnames:
-            if len(dirpath) > 1 and check_filetype(filename):
+            if len(dirpath) > 1:
                 dirlist.append(dirpath)
                 q = filedict.get(dirpath, [])
                 q.append(filename)
@@ -62,7 +63,19 @@ def read_directories():
 def process_list():
     # sort files in folders alphabetically
     for key in filedict:
-        filedict[key].sort()
+        folder = filedict[key]
+        folder.sort(key=lambda x: x.lower())
+        # create seasons / normalize time between episodes
+        assert len(folder) > 0
+        while len(folder) < MIN_FOLDER_SIZE:
+            before = randint(0, 1)
+            size = len(folder)
+            for _ in range(size):
+                dirlist.append(key)
+                if before:
+                    folder.insert(0, '')
+                else:
+                    folder.append('')
 
 
 def output_m3u():
@@ -72,7 +85,9 @@ def output_m3u():
             report_progress()
             dirpath = dirlist.pop(randint(1, len(dirlist)) - 1)
             filename = filedict[dirpath].pop(0)
-            open_file.write(('%s/%s\n' % (dirpath, filename)).encode('utf8'))
+            if check_filetype(filename):
+                open_file.write(('%s/%s\n' % (dirpath, filename)).encode(
+                    'utf8'))
     feedback('...Done')
 
 

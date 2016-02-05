@@ -3,9 +3,11 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 1.12
+#### 1.2
 * Extension Filter Text File
 * Output feedback messages
+* Case-insensitive sorting
+* Pad small directories for a better media experience (editable)
 
 
 ##Purpose
@@ -36,16 +38,18 @@ in a format compatible with multiple media players and platforms.
 
 
 ##Software Compatibility
-* Linux: Pass
-* Windows: Pass
-* VLC: Pass
-* Winamp: Pass
-* Fail: Media Player Classic
+* Pass
+    * Linux
+    * Windows
+    * VLC
+    * Winamp
+* Fail
+    * Media Player Classic
 
 
 ##Logical Assumptions
 * No files in the working directory should be added to playlist
-* Non-media files will be ignored/skipped quickly by the player
+* Non-media files will be ignored/skipped quickly by the player if not filtered
 * Large amounts of files can be quickly and eaisly renamed using Bulk Renamer
     * http://www.bulkrenameutility.co.uk/
 
@@ -53,3 +57,6 @@ in a format compatible with multiple media players and platforms.
 ##To-Do
 * Exclusion Regex File
 * Paths File
+* Settings File
+    * Min folder size
+    * Feedback method
