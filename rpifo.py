@@ -6,6 +6,7 @@ import re
 
 MIN_FOLDER_SIZE = 32
 dirlist = []
+exclusions = []
 extensions = []
 filedict = {}
 last_feedback = time()
@@ -23,6 +24,18 @@ def report_progress():
         last_feedback = now
 
 
+def set_exclusions():
+    global exclusions
+    filename = 'rexclude.txt'
+    if not os.path.exists(filename):
+        return False
+
+    with open(filename, 'r') as open_file:
+        for line in open_file:
+            exclude = re.split('\n', line)[0]
+            len(exclude) and exclusions.append(re.compile(exclude, re.I))
+
+
 def set_extensions():
     global extensions
     filename = 'ext.txt'
@@ -30,21 +43,24 @@ def set_extensions():
         return False
 
     with open(filename, 'r') as open_file:
+        pattern = re.compile('[\W_]+')
         for line in open_file:
             # strip . and \n
-            pattern = re.compile('[\W_]+')
             ext = pattern.sub('', line)
             len(ext) and extensions.append(ext)
 
 
 def check_filetype(filename):
+    for pattern in exclusions:
+        forbidden = pattern.search(filename)
+        if forbidden:
+            return False
     # exclude self and previous playlist result
-    if not len(extensions):
-        return True
-    ext = filename.split('.')[-1]
-    if ext in extensions:
-        return True
-    return False
+    if len(extensions):
+        ext = filename.split('.')[-1]
+        if not ext.lower() in extensions:
+            return False
+    return True
 
 
 def read_directories():
@@ -91,6 +107,7 @@ def output_m3u():
     feedback('...Done')
 
 
+set_exclusions()
 set_extensions()
 read_directories()
 process_list()

@@ -3,11 +3,12 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 1.2
+#### 1.3
 * Extension Filter Text File
 * Output feedback messages
 * Case-insensitive sorting
 * Pad small directories for a better media experience (editable)
+* Name Filter Text File
 
 
 ##Purpose
@@ -55,7 +56,6 @@ in a format compatible with multiple media players and platforms.
 
 
 ##To-Do
-* Exclusion Regex File
 * Paths File
 * Settings File
     * Min folder size
