@@ -4,7 +4,7 @@ import os
 import re
 
 
-MIN_FOLDER_SIZE = 32
+MIN_FOLDER_SIZE = 1     # Suggested value 32
 dirlist = []
 exclusions = []
 extensions = []
@@ -50,9 +50,9 @@ def set_extensions():
             len(ext) and extensions.append(ext)
 
 
-def check_filetype(filename):
+def check_filetype(filename, dirpath):
     for pattern in exclusions:
-        forbidden = pattern.search(filename)
+        forbidden = pattern.search(filename) or pattern.search(dirpath)
         if forbidden:
             return False
     # exclude self and previous playlist result
@@ -99,9 +99,9 @@ def output_m3u():
     with open('rpifo.m3u', 'w') as open_file:
         while len(dirlist):
             report_progress()
-            dirpath = dirlist.pop(randint(1, len(dirlist)) - 1)
+            dirpath = dirlist.pop(randint(0, len(dirlist)) - 1)
             filename = filedict[dirpath].pop(0)
-            if check_filetype(filename):
+            if check_filetype(filename, dirpath):
                 open_file.write(('%s/%s\n' % (dirpath, filename)).encode(
                     'utf8'))
     feedback('...Done')

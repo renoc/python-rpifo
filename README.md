@@ -3,7 +3,7 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 1.3
+#### 1.4
 * Extension Filter Text File
 * Output feedback messages
 * Case-insensitive sorting
@@ -27,6 +27,7 @@ in a format compatible with multiple media players and platforms.
 0. Organize your media into one folder per show (not per season) alphabetically
 1. Place rpifo.py in the parent directory that contains your media folders
     * Optional: Place ext.txt in same directory, edit as needed
+    * Optional: Place rexclude.txt in same directory, edit to filter files based on name
 2. Run the rpifo.py script
 3. Open the resulting rpifo.m3u in your media player.
 
