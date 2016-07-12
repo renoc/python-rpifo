@@ -1,10 +1,18 @@
 .sample
 
+aif
+au
+mid
+midi
+mod
 mp3
+ra
+ram
 wav
 
 avi
 divx
+ts
 mp4
 mpg
 mpeg
@@ -12,8 +20,12 @@ mkv
 ogg
 mov
 qt
+rm
+rmv
+rmvb
 flv
 webm
+wmv
 
 gif
 jif

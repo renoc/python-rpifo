@@ -3,8 +3,11 @@ from time import time
 import os
 import re
 
+from pdabt import DABTree
+
 
 MIN_FOLDER_SIZE = 1     # Suggested value 32
+dabtree = DABTree()
 dirlist = []
 exclusions = []
 extensions = []
@@ -78,20 +81,30 @@ def read_directories():
 
 def process_list():
     # sort files in folders alphabetically
+    feedback('Calculating Season Sizes...')
     for key in filedict:
         folder = filedict[key]
         folder.sort(key=lambda x: x.lower())
-        # create seasons / normalize time between episodes
         assert len(folder) > 0
-        while len(folder) < MIN_FOLDER_SIZE:
-            before = randint(0, 1)
-            size = len(folder)
-            for _ in range(size):
-                dirlist.append(key)
-                if before:
-                    folder.insert(0, '')
-                else:
-                    folder.append('')
+        place_season(folder, key, 1.0, dabtree)
+        report_progress()
+
+
+def place_season(folder, key, coverage, node):
+    # create seasons / normalize time between episodes
+    size = len(folder)
+    if size > MIN_FOLDER_SIZE:
+        node.add_value(value=coverage)
+        return
+    leaf = node.invoke_least()
+    before = node.west is leaf
+    for _ in range(size):
+        dirlist.append(key)
+        if before:
+            folder.insert(0, '')
+        else:
+            folder.append('')
+    place_season(folder, key, coverage/2.0, leaf)
 
 
 def output_m3u():
