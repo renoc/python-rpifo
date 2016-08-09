@@ -3,8 +3,9 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 2.0
+#### 2.1
 * New data structure to overkill clumping problem
+* Single settings file for options
 
 
 ##Purpose
@@ -22,9 +23,8 @@ in a format compatible with multiple media players and platforms.
 ##Instructions
 0. Organize your media into one folder per show (not per season) alphabetically
 1. Place .py files in the parent directory that contains your media folders
-    * Optional: Place ext.txt in same directory, edit to include file types
-    * Optional: Place rexclude.txt in same directory, edit to exclude files
-    * Recommended: Change MIN_FOLDER_SIZE, smaller folders will appear in a
+    * Optional: Rename settings.py.sample to settings.py and edit
+    ** Recommended: Change MIN_FOLDER_SIZE, smaller folders will appear in a
         smaller section of the playlist, preventing long breaks in a series
 2. Run the rpifo.py script
 3. Open the resulting rpifo.m3u in your media player.
@@ -55,8 +55,6 @@ in a format compatible with multiple media players and platforms.
 
 
 ##To-Do
-* Paths File
-* Settings File
-    * Min folder size
-    * Feedback method
+* Path settings
+* non-distributed dir regex
 * Make seperate pDABt project

@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, shuffle
 from time import time
 import os
 import re
@@ -6,7 +6,7 @@ import re
 from pdabt import DABTree
 
 
-MIN_FOLDER_SIZE = 1     # Suggested value 32
+MIN_FOLDER_SIZE = 2     # Minmum effective value
 dabtree = DABTree()
 dirlist = []
 exclusions = []
@@ -15,8 +15,11 @@ filedict = {}
 last_feedback = time()
 
 
-def feedback(message):
+def print_message(message):
     print message
+
+
+feedback = print_message
 
 
 def report_progress():
@@ -27,30 +30,33 @@ def report_progress():
         last_feedback = now
 
 
-def set_exclusions():
-    global exclusions
-    filename = 'rexclude.txt'
-    if not os.path.exists(filename):
-        return False
+def load_settings():
 
-    with open(filename, 'r') as open_file:
-        for line in open_file:
-            exclude = re.split('\n', line)[0]
-            len(exclude) and exclusions.append(re.compile(exclude, re.I))
+    def set_exclusions():
+        global exclusions
+        for exclude in settings.REGEX_FILENAME_EXCLUSION:
+            len(exclude) and exclusions.append(
+                re.compile(exclude.strip(), re.I))
 
-
-def set_extensions():
-    global extensions
-    filename = 'ext.txt'
-    if not os.path.exists(filename):
-        return False
-
-    with open(filename, 'r') as open_file:
+    def set_extensions():
+        global extensions
         pattern = re.compile('[\W_]+')
-        for line in open_file:
+        for ext in settings.EXTENTIONS:
             # strip . and \n
-            ext = pattern.sub('', line)
+            ext = pattern.sub('', ext)
             len(ext) and extensions.append(ext)
+
+    try:
+        import settings
+    except ImportError:
+        feedback('Settings NOT FOUND')
+        return False
+    global MIN_FOLDER_SIZE
+    feedback = settings.FEEDBACK
+    MIN_FOLDER_SIZE = settings.MIN_FOLDER_SIZE
+    set_exclusions()
+    set_extensions()
+    feedback('Settings loaded')
 
 
 def check_filetype(filename, dirpath):
@@ -80,31 +86,33 @@ def read_directories():
 
 
 def process_list():
+
+    def place_season(folder, key, count, node):
+        # create seasons / normalize time between episodes
+        size = len(folder)
+        if size > MIN_FOLDER_SIZE:
+            node.add_value(value=count)
+            return
+        leaf = node.invoke_least()
+        before = node.west is leaf
+        for _ in range(size):
+            dirlist.append(key)
+            if before:
+                folder.insert(0, '')
+            else:
+                folder.append('')
+        place_season(folder, key, count, leaf)
+
     # sort files in folders alphabetically
     feedback('Calculating Season Sizes...')
-    for key in filedict:
+    keys = filedict.keys()
+    shuffle(keys)
+    for key in keys:
         folder = filedict[key]
         folder.sort(key=lambda x: x.lower())
         assert len(folder) > 0
-        place_season(folder, key, 1.0, dabtree)
+        place_season(folder, key, len(folder), dabtree)
         report_progress()
-
-
-def place_season(folder, key, coverage, node):
-    # create seasons / normalize time between episodes
-    size = len(folder)
-    if size > MIN_FOLDER_SIZE:
-        node.add_value(value=coverage)
-        return
-    leaf = node.invoke_least()
-    before = node.west is leaf
-    for _ in range(size):
-        dirlist.append(key)
-        if before:
-            folder.insert(0, '')
-        else:
-            folder.append('')
-    place_season(folder, key, coverage/2.0, leaf)
 
 
 def output_m3u():
@@ -120,8 +128,7 @@ def output_m3u():
     feedback('...Done')
 
 
-set_exclusions()
-set_extensions()
+load_settings()
 read_directories()
 process_list()
 output_m3u()

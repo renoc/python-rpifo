@@ -1,0 +1,93 @@
+MIN_FOLDER_SIZE = 4     # Suggest using 1/2 maximum folder count
+
+
+REGEX_FILENAME_EXCLUSION = """(?<!e)xtra""".split('\n')
+
+
+def print_message(message):
+    print message
+
+
+FEEDBACK = print_message
+
+
+AUDIO_EXTENTIONS = """
+aif
+au
+mid
+midi
+mod
+mp3
+ra
+ram
+wav
+    """
+
+
+VIDEO_EXTENTIONS = """
+3g2
+3gp
+3gp2
+3gpp
+amv
+asf
+asx
+avi
+avs
+dat
+divx
+dv
+f4v
+flv
+m1v
+m2p
+m2t
+m2ts
+m2v
+m4v
+mkv
+mov
+mp4
+mp4v
+mpe
+mpeg
+mpg
+mpv
+mts
+nsv
+ogg
+ogm
+ogv
+qt
+rm
+rmv
+rmvb
+rv
+svcd
+swf
+tivo
+tod
+tp
+ts
+vcd
+vro
+webm
+wmv
+wvx
+    """
+# .vob may have odd results
+
+
+IMAGE_EXTENTIONS = """
+bmp
+gif
+jif
+jpeg
+jpg
+png
+tif
+    """
+
+
+EXTENTIONS = AUDIO_EXTENTIONS.split('\n') + VIDEO_EXTENTIONS.split(
+    '\n') + IMAGE_EXTENTIONS.split('\n') + ['sample']
