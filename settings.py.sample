@@ -90,4 +90,4 @@ tif
 
 
 EXTENTIONS = AUDIO_EXTENTIONS.split('\n') + VIDEO_EXTENTIONS.split(
-    '\n') + IMAGE_EXTENTIONS.split('\n') + ['sample']
+    '\n') + IMAGE_EXTENTIONS.split('\n') + ['sample', 'padding']

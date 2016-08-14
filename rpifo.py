@@ -3,11 +3,8 @@ from time import time
 import os
 import re
 
-from pdabt import DABTree
-
 
 MIN_FOLDER_SIZE = 2     # Minmum effective value
-dabtree = DABTree()
 dirlist = []
 exclusions = []
 extensions = []
@@ -31,6 +28,11 @@ def report_progress():
 
 
 def load_settings():
+    try:
+        import settings
+    except ImportError:
+        feedback('Settings NOT FOUND')
+        return False
 
     def set_exclusions():
         global exclusions
@@ -46,11 +48,6 @@ def load_settings():
             ext = pattern.sub('', ext)
             len(ext) and extensions.append(ext)
 
-    try:
-        import settings
-    except ImportError:
-        feedback('Settings NOT FOUND')
-        return False
     global MIN_FOLDER_SIZE
     feedback = settings.FEEDBACK
     MIN_FOLDER_SIZE = settings.MIN_FOLDER_SIZE
@@ -64,7 +61,6 @@ def check_filetype(filename, dirpath):
         forbidden = pattern.search(filename) or pattern.search(dirpath)
         if forbidden:
             return False
-    # exclude self and previous playlist result
     if len(extensions):
         ext = filename.split('.')[-1]
         if not ext.lower() in extensions:
@@ -76,7 +72,8 @@ def read_directories():
     feedback('Reading Directories...')
     for dirpath, dnames, fnames in os.walk(u'.'):
         for filename in fnames:
-            if len(dirpath) > 1:
+            # exclude self and previous playlist result
+            if len(dirpath) > 1 and check_filetype(filename, dirpath):
                 dirlist.append(dirpath)
                 q = filedict.get(dirpath, [])
                 q.append(filename)
@@ -86,6 +83,15 @@ def read_directories():
 
 
 def process_list():
+    # sort files in folders alphabetically
+    keys = filedict.keys()
+    for key in keys:
+        filedict[key].sort(key=lambda x: x.lower())
+    try:
+        from pdabt import DABTree
+    except ImportError:
+        feedback('DABTree NOT FOUND')
+        return False
 
     def place_season(folder, key, count, node):
         # create seasons / normalize time between episodes
@@ -94,22 +100,19 @@ def process_list():
             node.add_value(value=count)
             return
         leaf = node.invoke_least()
-        before = node.west is leaf
         for _ in range(size):
             dirlist.append(key)
-            if before:
+            if node.west is leaf:
                 folder.insert(0, '')
             else:
                 folder.append('')
         place_season(folder, key, count, leaf)
 
-    # sort files in folders alphabetically
+    dabtree = DABTree()
     feedback('Calculating Season Sizes...')
-    keys = filedict.keys()
     shuffle(keys)
     for key in keys:
         folder = filedict[key]
-        folder.sort(key=lambda x: x.lower())
         assert len(folder) > 0
         place_season(folder, key, len(folder), dabtree)
         report_progress()
@@ -122,9 +125,10 @@ def output_m3u():
             report_progress()
             dirpath = dirlist.pop(randint(0, len(dirlist)) - 1)
             filename = filedict[dirpath].pop(0)
-            if check_filetype(filename, dirpath):
-                open_file.write(('%s/%s\n' % (dirpath, filename)).encode(
-                    'utf8'))
+            # remove season padding
+            if not filename:
+                continue
+            open_file.write(('%s/%s\n' % (dirpath, filename)).encode('utf8'))
     feedback('...Done')
 
 
