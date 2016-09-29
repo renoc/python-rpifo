@@ -1,7 +1,12 @@
 MIN_FOLDER_SIZE = 4     # Suggest using 1/2 maximum folder count
 
 
-REGEX_FILENAME_EXCLUSION = """(?<!e)xtra""".split('\n')
+# Regex
+FILENAME_EXCLUSION = """(?<!e)xtra""".split('\n')
+
+
+# Do not compress playlist spacing into a 'season' for these folders
+FULLSPREAD_FOLDERS = ['movie', 'music']
 
 
 def print_message(message):

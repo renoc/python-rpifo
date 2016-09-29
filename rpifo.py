@@ -9,6 +9,7 @@ dirlist = []
 exclusions = []
 extensions = []
 filedict = {}
+fullspread = []
 last_feedback = time()
 
 
@@ -36,7 +37,7 @@ def load_settings():
 
     def set_exclusions():
         global exclusions
-        for exclude in settings.REGEX_FILENAME_EXCLUSION:
+        for exclude in settings.FILENAME_EXCLUSION:
             len(exclude) and exclusions.append(
                 re.compile(exclude.strip(), re.I))
 
@@ -48,11 +49,18 @@ def load_settings():
             ext = pattern.sub('', ext)
             len(ext) and extensions.append(ext)
 
+    def set_fullspread():
+        global fullspread
+        for folder in settings.FULLSPREAD_FOLDERS:
+            len(folder) and fullspread.append(
+                re.compile(folder.strip(), re.I))
+
     global MIN_FOLDER_SIZE
     feedback = settings.FEEDBACK
     MIN_FOLDER_SIZE = settings.MIN_FOLDER_SIZE
     set_exclusions()
     set_extensions()
+    set_fullspread()
     feedback('Settings loaded')
 
 
@@ -114,12 +122,18 @@ def process_list():
     for key in keys:
         folder = filedict[key]
         assert len(folder) > 0
-        place_season(folder, key, len(folder), dabtree)
+        exempt = False
+        for pattern in fullspread:
+            exempt = exempt or pattern.search(key)
+        if not exempt:
+            place_season(folder, key, len(folder), dabtree)
         report_progress()
 
 
 def output_m3u():
     feedback('Outputting File rpifo.m3u')
+    # Reduce problem with 'programming blocks'
+    shuffle(dirlist)
     with open('rpifo.m3u', 'w') as open_file:
         while len(dirlist):
             report_progress()

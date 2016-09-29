@@ -3,9 +3,10 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 2.2
+#### 2.3
 * New data structure to overkill clumping problem
 * Single settings file for options
+* Season Exempt folders spread thru entire playlist
 
 
 ##Purpose
@@ -56,5 +57,5 @@ in a format compatible with multiple media players and platforms.
 
 ##To-Do
 * Path settings
-* non-distributed dir regex
 * Make seperate pDABt project
+* Shuffle Folders Regex
