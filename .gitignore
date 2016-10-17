@@ -1,4 +1,4 @@
+*.m3u
 *.pyc
 debug*
-rpifo.m3u
 settings.py

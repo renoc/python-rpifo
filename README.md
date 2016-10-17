@@ -3,10 +3,8 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 2.3
-* New data structure to overkill clumping problem
-* Single settings file for options
-* Season Exempt folders spread thru entire playlist
+#### 3.0
+* New option to evenly space entries
 
 
 ##Purpose
@@ -27,8 +25,9 @@ in a format compatible with multiple media players and platforms.
     * Optional: Rename settings.py.sample to settings.py and edit
         * Recommended: Change MIN_FOLDER_SIZE, smaller folders will appear in a
         smaller section of the playlist, preventing long breaks in a series
-2. Run the rpifo.py script
-3. Open the resulting rpifo.m3u in your media player.
+2. Run the generate_playlist.py script
+3. Open the resulting playlist.m3u in your media player.
+    * Recommended: Change playlist name so it won't be overwritten by script
 
 
 ##Requirments
@@ -59,3 +58,5 @@ in a format compatible with multiple media players and platforms.
 * Path settings
 * Make seperate pDABt project
 * Shuffle Folders Regex
+* Random/Even mixed options
+* Feedback # kwarg

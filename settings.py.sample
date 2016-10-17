@@ -1,6 +1,9 @@
 MIN_FOLDER_SIZE = 4     # Suggest using 1/2 maximum folder count
 
 
+EVENLY_SPACED = True
+
+
 # Regex
 FILENAME_EXCLUSION = """(?<!e)xtra""".split('\n')
 
