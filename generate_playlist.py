@@ -18,6 +18,7 @@ class Playlist(object):
     feedback = print_message
     fullspread = []
     last_feedback = time()
+    rootdir = u'.'
 
     def __init__(self, *args, **kwargs):
         self.feedback = print_message
@@ -45,9 +46,10 @@ class Playlist(object):
                 len(folder) and self.fullspread.append(
                     re.compile(folder.strip(), re.I))
 
+        self.evenly_spaced = settings.EVENLY_SPACED
         self.feedback = settings.FEEDBACK
         self.MIN_FOLDER_SIZE = settings.MIN_FOLDER_SIZE
-        self.evenly_spaced = settings.EVENLY_SPACED
+        self.rootdir = settings.ROOT_DIR
         set_exclusions()
         set_extensions()
         set_fullspread()
@@ -112,7 +114,7 @@ class Playlist(object):
 
 def read_directories(playlist):
     playlist.feedback('Reading Directories...')
-    for dirpath, dnames, fnames in os.walk(u'.'):
+    for dirpath, dnames, fnames in os.walk(playlist.rootdir):
         for filename in fnames:
             # exclude self and previous playlist result
             if len(dirpath) > 1 and playlist.check_filetype(filename, dirpath):
@@ -136,7 +138,7 @@ def write_entry(playlist, open_file, dirpath):
 def output_espifo_m3u(playlist):
     output = []
     for directory in sorted(playlist.filedict, key=lambda k: len(
-                            playlist.filedict[k]), reverse=True):
+                            playlist.filedict[k]), reverse=False):
         playlist.report_progress()
         varient = len(output) / (len(playlist.filedict[directory]) + 1.0)
         for index in range(len(playlist.filedict[directory]), 0, -1):

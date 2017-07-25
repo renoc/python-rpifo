@@ -1,19 +1,8 @@
-MIN_FOLDER_SIZE = 4     # Suggest using 1/2 maximum folder count
+def print_message(message):
+    print message
 
 
 EVENLY_SPACED = True
-
-
-# Regex
-FILENAME_EXCLUSION = """(?<!e)xtra""".split('\n')
-
-
-# Do not compress playlist spacing into a 'season' for these folders
-FULLSPREAD_FOLDERS = ['movie', 'music']
-
-
-def print_message(message):
-    print message
 
 
 FEEDBACK = print_message
@@ -99,3 +88,17 @@ tif
 
 EXTENTIONS = AUDIO_EXTENTIONS.split('\n') + VIDEO_EXTENTIONS.split(
     '\n') + IMAGE_EXTENTIONS.split('\n') + ['sample', 'padding']
+
+
+# Regex
+FILENAME_EXCLUSION = """(?<!e)xtra""".split('\n')
+
+
+# Do not compress playlist spacing into a 'season' for these folders
+FULLSPREAD_FOLDERS = ['movie', 'music']
+
+
+MIN_FOLDER_SIZE = 4     # Suggest using 1/2 maximum folder count
+
+
+ROOT_DIR = u'.'

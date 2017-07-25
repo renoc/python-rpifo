@@ -3,7 +3,7 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 3.0
+#### 3.1
 * New option to evenly space entries
 
 
@@ -41,6 +41,7 @@ in a format compatible with multiple media players and platforms.
 * Pass
     * Linux
     * Windows
+    * Clementine
     * VLC
     * Winamp
 * Fail
