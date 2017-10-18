@@ -15,6 +15,7 @@ class Playlist(object):
     exclusions = []
     extensions = []
     filedict = {}
+    fulldict = {}
     feedback = print_message
     fullspread = []
     last_feedback = time()
@@ -107,7 +108,9 @@ class Playlist(object):
             exempt = False
             for pattern in self.fullspread:
                 exempt = exempt or pattern.search(key)
-            if not exempt:
+            if exempt:
+                self.fulldict[key] = self.filedict.pop(key)
+            else:
                 place_season(folder, key, len(folder), dabtree)
             self.report_progress()
 
@@ -135,14 +138,18 @@ def write_entry(playlist, open_file, dirpath):
     open_file.write(('%s/%s\n' % (dirpath, filename)).encode('utf8'))
 
 
-def output_espifo_m3u(playlist):
+def spaceout(playlist, dictlist):
     output = []
-    for directory in sorted(playlist.filedict, key=lambda k: len(
-                            playlist.filedict[k]), reverse=False):
+    for directory in sorted(dictlist, key=lambda k: len(
+                            dictlist[k]), reverse=False):
         playlist.report_progress()
-        varient = len(output) / (len(playlist.filedict[directory]) + 1.0)
-        for index in range(len(playlist.filedict[directory]), 0, -1):
-            output.insert(int(index * varient), directory)
+        varient = len(output) / (len(dictlist[directory]) + 1.0)
+        for index in range(len(dictlist[directory]), 0, -1):
+            output.insert(int(index * varient + 0.5), directory)
+    return output
+
+
+def output_espifo_m3u(playlist, output):
     with open('playlist.m3u', 'w') as open_file:
         for dirpath in output:
             playlist.dirlist.pop(0)
@@ -165,7 +172,15 @@ def gen_playlist():
     playlist.process_list()
     playlist.feedback('Outputting File playlist.m3u')
     if playlist.evenly_spaced is True:
-        output_espifo_m3u(playlist)
+        output = spaceout(playlist, playlist.filedict)
+        spaced = []
+        if len(playlist.fulldict):
+            spaced = spaceout(playlist, playlist.fulldict)
+            playlist.filedict.update(playlist.fulldict)
+            varient = len(output) / (len(spaced) + 1.0)
+            for index in range(len(spaced), 0, -1):
+                output.insert(int(index * varient + 0.5), spaced[index - 1])
+        output_espifo_m3u(playlist, output)
     else:
         output_rpifo_m3u(playlist)
     playlist.feedback('...Done')
