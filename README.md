@@ -3,8 +3,9 @@ Random Playlist In Folder Order
 
 
 ##Version
-#### 3.1
+#### 3.2
 * New option to evenly space entries
+* Reduce clustering from mixed evenly space and non dirs
 
 
 ##Purpose
